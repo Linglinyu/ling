@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd"
+	default-autowire="byName">
+	<context:annotation-config />
+	<!-- 自动扫描注入 -->
+	<context:component-scan 
+	base-package="com.lly.best.dao,
+	              com.lly.best.service,
+	              com.lly.best.controller"/>
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:hibernate.properties"  ignore-unresolvable="true" />
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass"><value>${jdbc.driver}</value></property>
+		<property name="jdbcUrl"><value>${jdbc.url}</value></property>
+		<property name="user"><value>${jdbc.username}</value></property>
+		<property name="password"><value>${jdbc.password}</value></property>
+		<property name="initialPoolSize"><value>${config.initialPoolSize}</value></property>
+		<property name="minPoolSize"><value>${config.minPoolSize}</value></property>
+		<property name="maxPoolSize"><value>${config.maxPoolSize}</value></property>
+		<property name="automaticTestTable"><value>${config.automaticTestTable}</value></property>		
+		<property name="checkoutTimeout"><value>5000</value></property>
+		<property name="maxIdleTime"><value>${config.maxIdleTime}</value></property>
+		<property name="acquireRetryAttempts"><value>${config.acquireIncrement}</value></property>
+		<property name="idleConnectionTestPeriod"><value>${config.idleConnectionTestPeriod}</value></property>
+		<property name="acquireIncrement"><value>${config.acquireIncrement}</value></property>
+	</bean>
+	
+	<bean id="hibernateTemplate" lazy-init="false"
+		class="org.springframework.orm.hibernate4.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+		<property name="cacheQueries" value="false" />
+	</bean>
+	
+	<!-- sessionFactory 配置 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.use_sql_comments">${hibernate.use_sql_comments}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.lly.best.entity</value>
+			</list>
+		</property>		
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 事务管理配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 注解方式配置事物 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<aop:aspectj-autoproxy />
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRES_NEW"	rollback-for="BaseException,DataBaseException" />
+			<tx:method name="find*" propagation="REQUIRES_NEW"  read-only="true" />
+			<tx:method name="query*" propagation="REQUIRES_NEW" read-only="true" />
+			<tx:method name="load*" propagation="REQUIRES_NEW" />
+			<tx:method name="submit*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException,Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="*delete*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="*add*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="change*" propagation="REQUIRED"	rollback-for="BaseException,DataBaseException" />
+			<tx:method name="execute*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="resultParse*" propagation="REQUIRED" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="upgrade" propagation="REQUIRES_NEW" rollback-for="BaseException,DataBaseException" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>  
+	</tx:advice>
+<!-- 	<aop:config> -->
+<!-- 		<aop:advisor pointcut="execution(* com.lly..service..*.*.*(..))" -->
+<!-- 			advice-ref="txAdvice" /> -->
+<!-- 	</aop:config> -->
+	<aop:config proxy-target-class="true"> 
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.lly..service..*.*(..))" /> 
+	</aop:config>
+</beans>
