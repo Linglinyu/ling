@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: net.sf.json-lib:json-lib:0.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.json-lib/json-lib/0.9/140f039ffd2b453e746eb3f8b6d7a777f5ca8165/json-lib-0.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.json-lib/json-lib/0.9/21cb02f05eeeca2300881b766f64ec157cafd029/json-lib-0.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

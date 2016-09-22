@@ -4,13 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * 类描述: 
- * 修改人: lyq
- * 修改时间: 2016-04-11 12:00
- * 修改备注: 
- * @version V1.0
+ * @author cwx
+ * @date 2016/09/22 14:08
+ * And it’s as if I never really even knew love until right now, in this moment, with you.
  */
-public interface  RowMapper {
-	public Object mapRow(ResultSet rs, int index)
-			throws SQLException;
+public interface RowMapper {
+    public Object mapRow(ResultSet rs, int index)
+            throws SQLException;
 }

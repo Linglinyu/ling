@@ -10,22 +10,20 @@ import com.lly.best.dto.LoginForm;
 import com.lly.best.entity.User;
 
 /**
- * 类描述: userDao
- * 修改人: lyq
- * 修改时间: 2016-04-11 12:00
- * 修改备注: 
- * @version V1.0
+ * @author cwx
+ * @date 2016/09/22 14:08
+ * And it’s as if I never really even knew love until right now, in this moment, with you.
  */
-@Repository
-public class UserDao extends BaseDaoImp<User, Integer>{
-	public User findUser(LoginForm loginForm){
-		String hql = "from User t where 1=1";
-		User user = new User();
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("name", loginForm.getName());
-		map.put("password", loginForm.getPassword());
-		user = super.getByHQL(hql.toString(), new Object[]{});
-		
-		return user;
-	}
+//@Repository
+public class UserDao extends BaseDaoImp<User, Integer> {
+    public User findUser(LoginForm loginForm) {
+        String hql = "from User t where 1=1";
+        User user = new User();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("name", loginForm.getName());
+        map.put("password", loginForm.getPassword());
+        user = super.getByHQL(hql.toString(), new Object[]{});
+
+        return user;
+    }
 }
