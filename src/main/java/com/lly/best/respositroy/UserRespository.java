@@ -4,7 +4,6 @@ import com.lly.best.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
 
 
 /**

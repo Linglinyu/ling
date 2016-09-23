@@ -4,16 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author cwx
- * @company 上海香克斯信息技术有限公司
- * @copyright (c) 2016 shanksits Co'Ltd Inc. All rights reserved.
- * @date 2016/08/25 11:09
+ * @date 2016/09/22 14:08
+ * And it’s as if I never really even knew love until right now, in this moment, with you.
  */
 @Controller
 @SpringBootApplication
